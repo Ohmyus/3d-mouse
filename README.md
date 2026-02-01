@@ -15,10 +15,10 @@ For each device that is built, the following are needed:
 - 2 pin magnetic pogo connectors (as many as pushbuttons)
 - USB cable (Arduino-Computer) Check that USB ports match before buying
 
-# BUILD INSTRUCTIONS:
+# Build Instructions:
 This section is still WIP. Feedback is welcome.
 
-# SOFTWARE INSTRUCTIONS:
+# Software Instructions:
 ## Installing the 3D Connexion Software
 Go to their [software download page](https://3dconnexion.com/us/drivers/) and download the appropriate software for your computer.
 
