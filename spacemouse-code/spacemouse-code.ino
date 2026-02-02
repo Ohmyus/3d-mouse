@@ -36,7 +36,7 @@ bool invRZ = true; // Rotate around Z axis (twist left/right)
 //    |           .
 //    A           Y-
 //
-// Wiring. Matches the first eight analogue pins of the Arduino Pro Micro (atmega32u4)
+// Wiring. Matches the Spacemouse PCB by P. M. & R. P., meant to house the Arduino Pro Micro (atmega32u4)
 int PINLIST[8] = { // The positions of the reads
   A8, // X-axis A
   A9, // Y-axis A
@@ -109,9 +109,9 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
 int centerPoints[8], rawReads[8], centered[8]; //moved here from loop declaration to avoid memory overhead
 
 //Final movement variables:
-int16_t transX, transY, transZ, rotX, rotY, rotZ; // Declare movement variables at 16 bit integers
+int16_t transX, transY, transZ, rotX, rotY, rotZ; // Declare movement variables as 16 bit integers
 
-// Function to read and store analogue voltages for each joystick axis.
+// Helper function to read and store analogue voltages for each joystick axis.
 void readAllFromJoystick(int *rawReads){
   for(int i=0; i<8; i++){
     rawReads[i] = analogRead(PINLIST[i]);
@@ -123,16 +123,16 @@ void setup() {
   static HIDSubDescriptor node(_hidReportDescriptor, sizeof(_hidReportDescriptor));
   HID().AppendDescriptor(&node);
   
-  if (debug != 0) { // Begin Seral for debugging
+  if (debug != 0) { // Begin Seral for debugging if there is a debug mode on
     Serial.begin(250000);
     delay(100);
   }
 
-  // Read idle/centre positions for joysticks.
+  // Read idle/centre positions for joysticks, and save it to the centerPoints variable.
   readAllFromJoystick(centerPoints);
 }
 
-// Function to send translation and rotation data to the 3DConnexion software using the HID protocol outlined earlier. Two sets of data are sent: translation and then rotation.
+// Function to send translation and rotation data to the 3DConnexion software using the HID protocol outlined earlier. Two sets of data are sent: rotation and then translation.
 // For each, a 16bit integer is split into two using bit shifting. The first is mangitude and the second is direction.
 void send_command(int16_t rx, int16_t ry, int16_t rz, int16_t x, int16_t y, int16_t z) {
   uint8_t trans[6] = { x & 0xFF, x >> 8, y & 0xFF, y >> 8, z & 0xFF, z >> 8 };
@@ -200,21 +200,22 @@ void loop() {
 
 // Report translation and rotation values if enabled. Approx -800 to 800 depending on the parameter.
   if(debug == 4){
-    print_rotations(transX, transY, transZ, rotX, rotY, rotZ);
+    print_rotations();
     Serial.print("\n"); //manually go to the next line
   }
 // Report debug 4 and 5 info side by side for direct reference if enabled. Very useful if you need to alter which inputs are used in th arithmatic above.
   if(debug == 5){
     print_joystick_values(centered);
     Serial.print("||");
-    print_rotations(transX, transY, transZ, rotX, rotY, rotZ);
+    print_rotations();
     Serial.print("\n"); //manually go to the next line
   }
 
 // Send data to the 3DConnexion software.
-// The correct order for me was determined after trial and error
+// The correct order was determined after trial and error
   send_command(rotX, rotY, rotZ, transX, transY, transZ);
-}
+  
+}// End of loop()
 
 // HELPER FUNCTIONS:
 void print_joystick_values(int *array) {
@@ -243,22 +244,22 @@ void print_joystick_values(int *array) {
   Serial.print(array[7]);
 }
 
-void print_rotations(int16_t TX, int16_t TY, int16_t TZ, int16_t RX, int16_t RY, int16_t RZ) {
+void print_rotations() {//Uses global variables to improve readability
   Serial.print("TX:");
-  Serial.print(TX);
+  Serial.print(transX);
   Serial.print(",");
   Serial.print("TY:");
-  Serial.print(TY);
+  Serial.print(transY);
   Serial.print(",");
   Serial.print("TZ:");
-  Serial.print(TZ);
+  Serial.print(transZ);
   Serial.print(",");
   Serial.print("RX:");
-  Serial.print(RX);
+  Serial.print(rotX);
   Serial.print(",");
   Serial.print("RY:");
-  Serial.print(RY);
+  Serial.print(rotY);
   Serial.print(",");
   Serial.print("RZ:");
-  Serial.print(RZ);
+  Serial.print(rotZ);
 }
