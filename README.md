@@ -10,9 +10,11 @@ For each device that is built, the following are needed:
 - Arduino Pro Micro x1
 - Spacemouse PCB x1
 - 3D printed parts
+- 0.5 mm pitch, 5-pin ZIF connector x4
+- Oculus quest joystick x4
 - Wire ~30 cm
 - 6x6x4.3 mm pushbutton (1 to 4, user choice)
-- 2 pin magnetic pogo connectors (as many as pushbuttons)
+- 2-pin magnetic pogo connectors (as many as pushbuttons)
 - USB cable (Arduino-Computer) Check that USB ports match before buying
 
 # Build Instructions:
