@@ -66,6 +66,10 @@ Go to 3D Connexion's [software download page](https://3dconnexion.com/us/drivers
 And that should get you a fully working spacemouse!
 ---
 
+## Known Issues:
+
+As of now, no code has been written to send the state of the pushbuttons. We still don't know how to send that state over the USB HID protocol. However, all the axis are working.
+
 ## Instructions for contributors:
 
 1. Remember to export the 3D mouse design as a `.step` file. 
